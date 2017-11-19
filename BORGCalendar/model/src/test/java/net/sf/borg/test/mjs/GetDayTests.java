@@ -1,4 +1,4 @@
-package net.sf.borg.test;
+package net.sf.borg.test.mjs;
 
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -19,6 +19,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -37,6 +38,11 @@ public class GetDayTests {
 
 	}
 
+	@AfterClass
+	public static void tearDown() throws Exception {
+		DBHelper.getController().close();
+		
+	}
 	// --------------------------------------------------------------------
 	// Tests from Specification Analysis
 	// --------------------------------------------------------------------
@@ -160,12 +166,6 @@ public class GetDayTests {
 		assertEquals("No items should exist on the day",0,d.getItems().size());		
 	}
 	
-	@Test
-	public void ClosedDatabaseConnection() throws Exception {
-		DBHelper.getController().getConnection().close();
-		Day d = Day.getDay(2017, 11, 9);
-		
-	}
 	
 	
 
