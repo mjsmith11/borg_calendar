@@ -180,7 +180,7 @@ public class GetDayTests {
 	public void Test10MonthLowerBoundaryAt() throws Exception {
 		CheckDayForAppointment(2009,0,2,2009,0,2);
 	}
-	//@Test
+	@Test
 	public void Test11MonthLowerBoundryLess() throws Exception {
 		CheckDayForAppointment(2008,11,2,2009,-1,2);
 	}
@@ -195,7 +195,7 @@ public class GetDayTests {
 		CheckDayForAppointment(2009,11,2,2009,11,2);
 	}
 	
-	//@Test
+	@Test
 	public void Test14MonthUpperBoundryLess() throws Exception {
 		CheckDayForAppointment(2009,10,2,2009,10,2);
 	}
@@ -207,7 +207,7 @@ public class GetDayTests {
 		CheckDayForAppointment(2009,1,1,2009,1,1);
 	}
 	
-	//@Test
+	@Test
 	public void Test16DayLowerBoundryLess() throws Exception {
 		CheckDayForAppointment(2009,0,31,2009,1,0);
 	}
@@ -222,7 +222,7 @@ public class GetDayTests {
 		CheckDayForAppointment(2009,2,31,2009,2,31);
 	}
 	
-	//@Test
+	@Test
 	public void Test19YearUpperBoundryLess() throws Exception {
 		CheckDayForAppointment(2009,2,30,2009,2,30);
 	}
