@@ -227,6 +227,7 @@ public class GetDayTests {
 		CheckDayForAppointment(2009,2,30,2009,2,30);
 	}
 	
+	/// Helper method for boundary value tests
 	/// 1. Create an appointment using apptYear, apptMonth, and apptDay
 	/// 2. Call getDay for checkYear, checkMonth, and checkDay
 	/// 3. Assert that the returned Day has the created appointment
@@ -248,7 +249,11 @@ public class GetDayTests {
 		AppointmentModel.getReference().delAppt(a);
 	}
 	
-	
+	// --------------------------------------------------------------------
+	// Tests from Equivalence Partitioning
+	// **At this time, previous test cases cover all equivalence classes
+	// and there are no additional test cases to add here
+	// --------------------------------------------------------------------
 	
 
 	//@Test
