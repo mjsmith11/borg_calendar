@@ -166,30 +166,105 @@ public class GetDayTests {
 		assertEquals("No items should exist on the day",0,d.getItems().size());		
 	}
 	
+	// --------------------------------------------------------------------
+	// Tests from Boundary Value Analysis
+	// --------------------------------------------------------------------
 	
-	
-
 	@Test
-	public void test() throws Exception {
-		/*
-		 * Prefs.putPref(PrefName.SHOWUSHOLIDAYS, "true"); Day d = Day.getDay(2017, 11,
-		 * 32); //assertEquals(1,d.getHoliday());
-		 * assertEquals(Prefs.getPref(PrefName.SHOWUSHOLIDAYS),"true");
-		 * 
-		 * Calendar cal = new GregorianCalendar(0, 1, -1);
-		 * assertEquals(cal.get(Calendar.YEAR),2014);
-		 * assertEquals(cal.get(Calendar.MONTH),0);
-		 * assertEquals(cal.get(Calendar.DAY_OF_MONTH),31);
-		 */
-
-		GregorianCalendar gc = new GregorianCalendar(2017, 2, 12, 11, 00);
-		boolean dstNow = TimeZone.getDefault().inDaylightTime(gc.getTime());
-		gc.add(Calendar.DATE, -1);
-		boolean dstYesterday = TimeZone.getDefault().inDaylightTime(gc.getTime());
-
-		assertTrue(dstNow);
-		assertFalse(dstYesterday);
-
+	public void MonthLowerBoundryGreater() throws Exception {
+		CheckDayForAppointment(2009,1,2,2009,1,2);
 	}
+	
+	@Test
+	public void MonthLowerBoundaryAt() throws Exception {
+		CheckDayForAppointment(2009,0,2,2009,0,2);
+	}
+	
+	//@Test
+	public void MonthLowerBoundryLess() throws Exception {
+		CheckDayForAppointment(2008,11,2,2009,-1,2);
+	}
+	
+	@Test
+	public void MonthUpperBoundryGreater() throws Exception {
+		CheckDayForAppointment(2010,0,2,2009,12,2);
+	}
+	
+	@Test
+	public void MonthUpperBoundaryAt() throws Exception {
+		CheckDayForAppointment(2009,11,2,2009,11,2);
+	}
+	
+	//@Test
+	public void MonthUpperBoundryLess() throws Exception {
+		CheckDayForAppointment(2009,10,2,2009,10,2);
+	}
+	
+	//DayLowerBoundaryGreater is covered by MonthLowerBoundaryGreater
+	
+	@Test
+	public void DayLowerBoundaryAt() throws Exception {
+		CheckDayForAppointment(2009,1,1,2009,1,1);
+	}
+	
+	//@Test
+	public void DayLowerBoundryLess() throws Exception {
+		CheckDayForAppointment(2009,0,31,2009,1,0);
+	}
+	
+	@Test
+	public void DayUpperBoundryGreater() throws Exception {
+		CheckDayForAppointment(2009,3,1,2009,2,32);
+	}
+	
+	@Test
+	public void DayUpperBoundaryAt() throws Exception {
+		CheckDayForAppointment(2009,2,31,2009,2,31);
+	}
+	
+	//@Test
+	public void YearUpperBoundryLess() throws Exception {
+		CheckDayForAppointment(2009,2,30,2009,2,30);
+	}
+	
+	/// 1. Create an appointment using apptYear, apptMonth, and apptDay
+	/// 2. Call getDay for checkYear, checkMonth, and checkDay
+	/// 3. Assert that the returned Day has the created appointment
+	/// 4. Delete the appointment
+	private void CheckDayForAppointment(int apptYear, int apptMonth, int apptDay, int checkYear, int checkMonth, int checkDay) throws Exception {
+		String appointmentTitle = "Test Appointment";
+
+		Appointment a = new Appointment();
+		Calendar ApptDate = new GregorianCalendar(apptYear, apptMonth, apptDay);
+		a.setText(appointmentTitle);
+		a.setDate(ApptDate.getTime());
+		AppointmentModel.getReference().saveAppt(a);
+		
+		Day d = Day.getDay(checkYear, checkMonth, checkDay);
+
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Item Title", appointmentTitle, observedItemLabel);
+		
+		AppointmentModel.getReference().delAppt(a);
+	}
+	
+	
+	
+
+	//@Test
+	public void test() throws Exception {
+		
+		  Prefs.putPref(PrefName.SHOWUSHOLIDAYS, "true"); Day d = Day.getDay(2017, 11,
+		  32); //assertEquals(1,d.getHoliday());
+		  assertEquals(Prefs.getPref(PrefName.SHOWUSHOLIDAYS),"true");
+		  
+		  Calendar cal = new GregorianCalendar(0, 0, 2);
+		  Calendar cal2 = new GregorianCalendar(1,0,2);
+		  assertEquals("years", cal.get(Calendar.YEAR), cal2.get(Calendar.YEAR));
+		  assertEquals(cal.get(Calendar.YEAR),1);
+		  assertEquals(cal.get(Calendar.MONTH),0);
+		  assertEquals(cal.get(Calendar.DAY_OF_MONTH),2);
+		  assertEquals(cal.getTime().toString(), cal2.getTime().toString());
+		 	}
 
 }
