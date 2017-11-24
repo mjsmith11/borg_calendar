@@ -255,6 +255,80 @@ public class GetDayTests {
 	// and there are no additional test cases to add here
 	// --------------------------------------------------------------------
 	
+	// --------------------------------------------------------------------
+	// Tests from Predicate Analysis
+	// --------------------------------------------------------------------
+	
+	@Test
+	public void Test20to23Halloween() throws Exception{
+		CheckDayForHoliday("true","",9,31,2017,Resource.getResourceString("Halloween")); 			//20
+		CheckDayForHoliday("false","",9,31,2017,""); 												//21
+		CheckDayForHoliday("true","",10,31,2017,""); 												//22
+		CheckDayForHoliday("true","",9,30,2017,""); 												//23
+	}
+	
+	@Test
+	public void Test24to27IndependenceDay() throws Exception{
+		CheckDayForHoliday("true","",6,4,2017,Resource.getResourceString("Independence_Day"));		//24
+		CheckDayForHoliday("false","",6,4,2017,"");													//25
+		CheckDayForHoliday("true","",7,4,2017,"");													//26
+		CheckDayForHoliday("true","",6,5,2017,"");													//27
+	}
+	
+	@Test
+	public void Test28to31GroundhogDay() throws Exception{
+		CheckDayForHoliday("true","",1,2,2017,Resource.getResourceString("Ground_Hog_Day"));		//28
+		CheckDayForHoliday("false","",1,2,2017,"");													//29
+		CheckDayForHoliday("true","",2,2,2017,"");													//30
+		CheckDayForHoliday("true","",1,3,2017,"");													//31
+	}
+	
+	@Test
+	public void Test32to35ValentinesDay() throws Exception{
+		CheckDayForHoliday("true","",1,14,2017,Resource.getResourceString("Valentine's_Day"));		//32
+		CheckDayForHoliday("false","",1,14,2017,"");												//33
+		CheckDayForHoliday("true","",2,14,2017,"");													//34
+		CheckDayForHoliday("true","",1,15,2017,"");													//35
+	}
+		
+	@Test
+	public void Test36to39StPatricksDay() throws Exception{
+		CheckDayForHoliday("true","",2,17,2017,Resource.getResourceString("St._Patrick's_Day"));	//36
+		CheckDayForHoliday("false","",2,17,2017,"");												//37
+		CheckDayForHoliday("true","",3,17,2017,"");													//38
+		CheckDayForHoliday("true","",2,18,2017,"");													//39
+	}
+	
+	///Helper Method for Predicate Analysis Tests
+	///1. Set SHOWUSHOLIDAYS to showUS if it isn't ""
+	///2. Set SHOWCANHOLIDAYS to showCAN if it isn't ""
+	///3. getDay for month, day, and year
+	///4. If expectedHoliday is "", assert that there are no items on the returned day
+	///5. If expectedHoliday is not "", assert that the specified holiday is returned on the day
+	///6. Restore SHOWUSHOLIDAYS and SHOWCANHOLIDAYS if they were changed
+	private void CheckDayForHoliday(String showUS, String showCAN, int month, int day, int year, String expectedHoliday) throws Exception {
+		String backupShowUS;
+		String backupShowCAN;
+		if(!showUS.equals("")) {
+			backupShowUS = Prefs.getPref(PrefName.SHOWUSHOLIDAYS);
+			Prefs.putPref(PrefName.SHOWUSHOLIDAYS, showUS);
+		}
+		if(!showCAN.equals("")) {
+			backupShowCAN = Prefs.getPref(PrefName.SHOWCANHOLIDAYS);
+			Prefs.putPref(PrefName.SHOWCANHOLIDAYS, showCAN);
+		}
+		
+		Day d = Day.getDay(year, month, day);
+		if(expectedHoliday.equals(""))
+		{
+			assertEquals("No items should exist on the day",0,d.getItems().size());
+		}
+		else
+		{
+			String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+			assertEquals("Expected holiday not found",expectedHoliday,observedItemLabel);
+		}
+	}
 
 	//@Test
 	public void test() throws Exception {
