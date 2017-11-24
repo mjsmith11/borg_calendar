@@ -10,10 +10,9 @@ import net.sf.borg.model.AppointmentModel;
 import net.sf.borg.model.Day;
 
 public class NoDBGetDayTests {
-
 	//This actually causes a null pointer exception, but something is causing JUnit to see ExceptionInInitializerError
 	@Test(expected=ExceptionInInitializerError.class)
-	public void NoDatabaseConnection() throws Exception {
+	public void Test8NoDatabaseConnection() throws Exception {
 		AppointmentModel.getReference().refresh();
 		Day d = Day.getDay(2017, 11, 9);
 		

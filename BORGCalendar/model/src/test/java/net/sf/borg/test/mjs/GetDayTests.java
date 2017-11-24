@@ -46,8 +46,10 @@ public class GetDayTests {
 	// --------------------------------------------------------------------
 	// Tests from Specification Analysis
 	// --------------------------------------------------------------------
+	
+	
 	@Test
-	public void DaylightSavingTime() throws Exception {
+	public void Test1DaylightSavingTime() throws Exception {
 		Day d = Day.getDay(2017, 2, 12);
 		String expectedItemColor = "black";
 		String expectedItemLabel = Resource.getResourceString("Daylight_Savings_Time");
@@ -59,7 +61,7 @@ public class GetDayTests {
 	}
 
 	@Test
-	public void StandardTime() throws Exception {
+	public void Test2StandardTime() throws Exception {
 		Day d = Day.getDay(2018, 10, 4);
 		String expectedItemColor = "black";
 		String expectedItemLabel = Resource.getResourceString("Standard_Time");
@@ -71,7 +73,7 @@ public class GetDayTests {
 	}
 
 	@Test
-	public void Appointment() throws Exception {
+	public void Test3Appointment() throws Exception {
 		String appointmentColor = "green";
 		String appointmentTitle = "Test Appointment";
 
@@ -97,7 +99,7 @@ public class GetDayTests {
 	}
 	
 	@Test
-	public void USHoliday() throws Exception {
+	public void Test4USHoliday() throws Exception {
 		String prefValue = Prefs.getPref(PrefName.SHOWUSHOLIDAYS);
 		
 		Prefs.putPref(PrefName.SHOWUSHOLIDAYS, "true");
@@ -116,7 +118,7 @@ public class GetDayTests {
 	}
 	
 	@Test
-	public void CanadianHoliday() throws Exception {
+	public void Test5CanadianHoliday() throws Exception {
 		String prefValue = Prefs.getPref(PrefName.SHOWCANHOLIDAYS);
 		
 		Prefs.putPref(PrefName.SHOWCANHOLIDAYS, "true");
@@ -136,7 +138,7 @@ public class GetDayTests {
 	
 	@Test
 	//This covers the first day of a month and year as well as a common holiday
-	public void CommonHoliday() throws Exception {
+	public void Test6CommonHoliday() throws Exception {
 		String prefValue = Prefs.getPref(PrefName.SHOWCANHOLIDAYS);
 		
 		Prefs.putPref(PrefName.SHOWCANHOLIDAYS, "true");
@@ -155,7 +157,7 @@ public class GetDayTests {
 	}
 	
 	@Test
-	public void EndOfMonthAndYear() throws Exception {
+	public void Test7EndOfMonthAndYear() throws Exception {
 		Day d = Day.getDay(2017,11,31);
 		int expectedHolidayFlag = 0;
 		int expectedVacationFlag = 0;
@@ -171,59 +173,57 @@ public class GetDayTests {
 	// --------------------------------------------------------------------
 	
 	@Test
-	public void MonthLowerBoundryGreater() throws Exception {
+	public void Test9MonthLowerBoundryGreater() throws Exception {
 		CheckDayForAppointment(2009,1,2,2009,1,2);
 	}
-	
 	@Test
-	public void MonthLowerBoundaryAt() throws Exception {
+	public void Test10MonthLowerBoundaryAt() throws Exception {
 		CheckDayForAppointment(2009,0,2,2009,0,2);
 	}
-	
 	//@Test
-	public void MonthLowerBoundryLess() throws Exception {
+	public void Test11MonthLowerBoundryLess() throws Exception {
 		CheckDayForAppointment(2008,11,2,2009,-1,2);
 	}
 	
 	@Test
-	public void MonthUpperBoundryGreater() throws Exception {
+	public void Test12MonthUpperBoundryGreater() throws Exception {
 		CheckDayForAppointment(2010,0,2,2009,12,2);
 	}
 	
 	@Test
-	public void MonthUpperBoundaryAt() throws Exception {
+	public void Test13MonthUpperBoundaryAt() throws Exception {
 		CheckDayForAppointment(2009,11,2,2009,11,2);
 	}
 	
 	//@Test
-	public void MonthUpperBoundryLess() throws Exception {
+	public void Test14MonthUpperBoundryLess() throws Exception {
 		CheckDayForAppointment(2009,10,2,2009,10,2);
 	}
 	
-	//DayLowerBoundaryGreater is covered by MonthLowerBoundaryGreater
+	//DayLowerBoundaryGreater is covered by Test9MonthLowerBoundaryGreater
 	
 	@Test
-	public void DayLowerBoundaryAt() throws Exception {
+	public void Test15DayLowerBoundaryAt() throws Exception {
 		CheckDayForAppointment(2009,1,1,2009,1,1);
 	}
 	
 	//@Test
-	public void DayLowerBoundryLess() throws Exception {
+	public void Test16DayLowerBoundryLess() throws Exception {
 		CheckDayForAppointment(2009,0,31,2009,1,0);
 	}
 	
 	@Test
-	public void DayUpperBoundryGreater() throws Exception {
+	public void Test17DayUpperBoundryGreater() throws Exception {
 		CheckDayForAppointment(2009,3,1,2009,2,32);
 	}
 	
 	@Test
-	public void DayUpperBoundaryAt() throws Exception {
+	public void Test18DayUpperBoundaryAt() throws Exception {
 		CheckDayForAppointment(2009,2,31,2009,2,31);
 	}
 	
 	//@Test
-	public void YearUpperBoundryLess() throws Exception {
+	public void Test19YearUpperBoundryLess() throws Exception {
 		CheckDayForAppointment(2009,2,30,2009,2,30);
 	}
 	
