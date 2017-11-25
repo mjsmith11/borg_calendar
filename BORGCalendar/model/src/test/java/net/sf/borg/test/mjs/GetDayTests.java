@@ -1,6 +1,7 @@
 package net.sf.borg.test.mjs;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
@@ -11,10 +12,12 @@ import net.sf.borg.common.Resource;
 import net.sf.borg.model.db.jdbc.JdbcDBHelper;
 import net.sf.borg.model.entity.CalendarEntity;
 import net.sf.borg.model.entity.CheckList;
+import net.sf.borg.model.entity.Task;
 import net.sf.borg.model.entity.Appointment;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -26,6 +29,7 @@ import org.junit.Test;
 
 import net.sf.borg.model.AppointmentModel;
 import net.sf.borg.model.Day;
+import net.sf.borg.model.TaskModel;
 
 public class GetDayTests {
 
@@ -496,7 +500,223 @@ public class GetDayTests {
 			Prefs.putPref(PrefName.SHOWCANHOLIDAYS, backupShowCAN);
 		}
 	}
+	
+	// --------------------------------------------------------------------
+	// Tests Finite State Model Analysis
+	// --------------------------------------------------------------------
+	@Test
+	public void Test120() throws Exception{
+		Day d = getFSMDay("v",10,1,2017);
+		//State q1
+		assertEquals("Holiday Flag",0,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test121() throws Exception{
+		Day d = getFSMDay("h",10,2,2017);
+		//State q2
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",0,d.getVacation());
+	}
+	
+	@Test
+	public void Test122() throws Exception{
+		Day d = getFSMDay("vv",10,3,2017);
+		//State q1
+		assertEquals("Holiday Flag",0,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test123() throws Exception{
+		Day d = getFSMDay("vh",10,4,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test124() throws Exception{
+		Day d = getFSMDay("hv",10,5,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test125() throws Exception{
+		Day d = getFSMDay("hh",10,6,2017);
+		//State q2
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",0,d.getVacation());
+	}
+	
+	@Test
+	public void Test126() throws Exception{
+		Day d = getFSMDay("vvv",10,7,2017);
+		//State q1
+		assertEquals("Holiday Flag",0,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test127() throws Exception{
+		Day d = getFSMDay("vvh",10,8,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test128() throws Exception{
+		Day d = getFSMDay("vhv",10,9,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test129() throws Exception{
+		Day d = getFSMDay("vhh",10,10,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test130() throws Exception{
+		Day d = getFSMDay("hvv",10,11,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test131() throws Exception{
+		Day d = getFSMDay("hvh",10,12,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test132() throws Exception{
+		Day d = getFSMDay("hhv",10,13,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test133() throws Exception{
+		Day d = getFSMDay("hhh",10,14,2017);
+		//State q2
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",0,d.getVacation());
+	}
+	
+	@Test
+	public void Test134() throws Exception{
+		Day d = getFSMDay("hvvv",10,15,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test135() throws Exception{
+		Day d = getFSMDay("hvvh",10,16,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test136() throws Exception{
+		Day d = getFSMDay("hvhv",10,17,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	@Test
+	public void Test137() throws Exception{
+		Day d = getFSMDay("hvhh",10,11,2017);
+		//State q3
+		assertEquals("Holiday Flag",1,d.getHoliday());
+		assertEquals("Vacation Flag",1,d.getVacation());
+	}
+	
+	///Helper for Finite State Model Testing
+	///Loops through the provided input left to right
+	///creating a vacation appointment for each v and
+	///a holiday appointment for each h on the day provided
+	///in month, day, and year.  Then it returns the Day for
+	///that month, day, and year.  Last, it deletes all of the appointments 
+	// it created.
+	private Day getFSMDay(String input, int month, int day, int year) throws Exception {
+		List<Appointment> appts = new ArrayList<Appointment>();
+		for(int i = 0; i<input.length(); i++)
+		{
+			Appointment a = new Appointment();
+			Calendar date = new GregorianCalendar(year, month, day);
+			a.setText("Appointment "+i);
+			a.setDate(date.getTime());
+			if(input.charAt(i)=='v')
+				a.setVacation(1);
+			else if(input.charAt(i)=='h')
+				a.setHoliday(1);
+			AppointmentModel.getReference().saveAppt(a);
+			appts.add(a);
+		}
+		Day ret = Day.getDay(year, month, day);
+		for (Appointment app : appts)
+		{
+			AppointmentModel.getReference().delAppt(app);
+		}
+		return ret;
+	}
+	
+	//@Test
+	public void Testex() throws Exception {
+		/*String appointmentColor = "green";
+		String appointmentTitle = "Test Appointment";
 
+		Appointment a = new Appointment();
+		Calendar ApptDate = new GregorianCalendar(2017, 5, 17);
+		a.setColor(appointmentColor);
+		a.setText(appointmentTitle);
+		a.setDate(ApptDate.getTime());
+		AppointmentModel.getReference().saveAppt(a);
+		int expectedHolidayFlag = 0;
+		int expectedVacationFlag = 0;
+		
+		Day d = Day.getDay(2017, 5, 17);
+
+		String observedItemColor = ((TreeSet<CalendarEntity>) d.getItems()).first().getColor();
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Item Color", appointmentColor, observedItemColor);
+		assertEquals("Item Title", appointmentTitle, observedItemLabel);
+		assertEquals("Holiday Flag", expectedHolidayFlag, d.getHoliday());
+		assertEquals("Vacation Flag", expectedVacationFlag, d.getVacation());
+		
+		AppointmentModel.getReference().delAppt(a);*/
+		
+		Task t = new Task();
+		Calendar TDate=new GregorianCalendar(2017,5,13);
+		t.setDueDate(TDate.getTime());
+		t.setCompletionDate(TDate.getTime());
+		t.setStartDate(TDate.getTime());
+		t.setDescription("Task1");
+		t.setState("Not Started");
+		t.setType("New");
+		TaskModel.getReference().savetask(t);
+		
+		Day d = Day.getDay(2017,5,13);
+		Task t1 = (Task)(((TreeSet<CalendarEntity>) d.getItems()).first());
+		assertEquals(t1.getDescription(),"Task1");
+	}
 	//@Test
 	public void test() throws Exception {
 		
