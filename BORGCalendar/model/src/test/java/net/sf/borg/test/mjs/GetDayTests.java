@@ -414,6 +414,50 @@ public class GetDayTests {
 		CheckDayForHoliday("","true",8,5,2017,"");														//95
 	}
 	
+	@Test
+	public void Test96to99CommonwealthDay() throws Exception{
+		CheckDayForHoliday("","true",2,13,2017,Resource.getResourceString("Commonwealth_Day"));			//96
+		CheckDayForHoliday("","false",2,13,2017,"");													//97
+		CheckDayForHoliday("","true",10,13,2017,"");													//98
+		CheckDayForHoliday("","true",2,14,2017,"");														//99
+	}
+	
+	@Test
+	public void Test100to103ThanksgivingCan() throws Exception{
+		CheckDayForHoliday("false","true",9,9,2017,Resource.getResourceString("Thanksgiving_(Can)"));	//100
+		CheckDayForHoliday("false","false",9,9,2017,"");												//101
+		CheckDayForHoliday("","true",10,13,2017,"");													//102
+		CheckDayForHoliday("","true",9,10,2017,"");														//103
+	}
+	
+	@Test
+	public void Test104to108NewYears() throws Exception {
+		CheckDayForHoliday("true","false",0,1,2017,Resource.getResourceString("New_Year's_Day"));		//104
+		CheckDayForHoliday("false","true",0,1,2017,Resource.getResourceString("New_Year's_Day"));		//105
+		CheckDayForHoliday("false","false",0,1,2017,"");												//106
+		CheckDayForHoliday("true","false",1,1,2017,"");													//107
+		CheckDayForHoliday("true","false",0,2,2017,"");													//108
+	}
+	
+	@Test
+	public void Test109to113Christmas() throws Exception {
+		CheckDayForHoliday("true","false",11,25,2017,Resource.getResourceString("Christmas"));			//109
+		CheckDayForHoliday("false","true",11,25,2017,Resource.getResourceString("Christmas"));			//110
+		CheckDayForHoliday("false","false",11,25,2017,"");												//111
+		CheckDayForHoliday("true","false",10,25,2017,"");												//112
+		CheckDayForHoliday("true","false",11,24,2017,"");												//113
+	}
+	
+	@Test
+	public void Test114to119VictoriaDay() throws Exception {
+		CheckDayForHoliday("","true",4,22,2017,Resource.getResourceString("Victoria_Day"));				//114
+		CheckDayForHoliday("","false",4,22,2017,"");													//115
+		CheckDayForHoliday("","true",4,23,2017,"");														//116
+		CheckDayForHoliday("","true",4,15,2017,"");														//117
+		CheckDayForHoliday("false","true",4,29,2017,"");												//118
+		CheckDayForHoliday("","true",5,19,2017,"");														//119
+	}
+	
 	
 	///Helper Method for Predicate Analysis Tests
 	///1. Set SHOWUSHOLIDAYS to showUS if it isn't ""
