@@ -135,7 +135,13 @@ public class addToDayTests {
 	}
 	
 	@Test
-	public void Test6VacationAppt() throws Exception {
+	public void Test6VacationAppt() throws Exception {	
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
 		Day d = Day.getNewDay();
 		List<Integer> l = new ArrayList<Integer>();
 		l.add(vacationAppt.getKey());
@@ -149,10 +155,18 @@ public class addToDayTests {
 		assertEquals("Vacation Flag", 1, observedVacation);
 		assertEquals("Holiday Flag", 0, observedHoliday);
 		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
 	}
 	
 	@Test
 	public void Test7HolidayAppt() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
 		Day d = Day.getNewDay();
 		List<Integer> l = new ArrayList<Integer>();
 		l.add(holidayAppt.getKey());
@@ -165,6 +179,9 @@ public class addToDayTests {
 		assertEquals("Appointment Text", holidayAppt.getText(), observedItemLabel);
 		assertEquals("Holiday Flag", 1, observedHoliday);
 		assertEquals("Vacation Flag", 0, observedVacation);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
 		
 	}
 	
@@ -202,6 +219,12 @@ public class addToDayTests {
 	
 	@Test
 	public void Test9NoHolidayNoVacation() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
 		Day d = Day.getNewDay();
 		List<Integer> l = new ArrayList<Integer>();
 		l.add(publicAppt.getKey());
@@ -215,10 +238,19 @@ public class addToDayTests {
 		assertEquals("Holiday Flag", 0, observedHoliday);
 		assertEquals("Vacation Flag", 0, observedVacation);
 		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+		
 	}
 	
 	@Test
 	public void Test10HolidayVacation() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
 		Day d = Day.getNewDay();
 		List<Integer> l = new ArrayList<Integer>();
 		l.add(vacationHolidayAppt.getKey());
@@ -231,6 +263,9 @@ public class addToDayTests {
 		assertEquals("Appointment Text", vacationHolidayAppt.getText(), observedItemLabel);
 		assertEquals("Holiday Flag", 1, observedHoliday);
 		assertEquals("Vacation Flag", 1, observedVacation);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
 		
 	}
 	
@@ -354,4 +389,539 @@ public class addToDayTests {
 		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
 		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
 	}
+	
+	// --------------------------------------------------------------------
+	// Tests from Finite State Model-Based Analysis
+	// --------------------------------------------------------------------
+	@Test
+	public void Test17() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//u
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", publicAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test18() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//r
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", privateAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test19() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//uu
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", publicAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test20() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//ur
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test21() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//ru
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test22() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//rr
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", privateAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test23() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//uuu
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", publicAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test24() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//uur
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test25() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//uru
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test26() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//urr
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test27() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//ruu
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");		
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test28() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//rur
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");	
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test29() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//rru
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+			
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test30() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//rrr
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");	
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", privateAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test31() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//ruuu
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");			
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test32() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//ruur
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");			
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test33() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//ruru
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+					
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
+	@Test
+	public void Test34() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		//rurr
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");			
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);
+		
+	}
+	
 }
