@@ -233,4 +233,125 @@ public class addToDayTests {
 		assertEquals("Vacation Flag", 1, observedVacation);
 		
 	}
+	
+	// --------------------------------------------------------------------
+	// Tests from Predicate Analysis
+	// --------------------------------------------------------------------
+	@Test
+	public void Test11() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", privateAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+	}
+	
+	@Test
+	public void Test12() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		assertEquals("Appointment Text", publicAppt.getText(), observedItemLabel);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+	}
+	
+	@Test
+	public void Test13() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection", 0, d.getItems().size());
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+	}
+	
+	@Test
+	public void Test14() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection", 0, d.getItems().size());
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+	}
+	
+	@Test
+	public void Test15() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection", 0, d.getItems().size());
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+	}
+	
+	@Test
+	public void Test16() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "false");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "false");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection", 0, d.getItems().size());
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);	
+	}
 }
