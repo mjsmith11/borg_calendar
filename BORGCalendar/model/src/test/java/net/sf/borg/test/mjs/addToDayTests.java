@@ -27,6 +27,7 @@ public class addToDayTests {
 	private static Appointment privateAppt;
 	private static Appointment vacationAppt;
 	private static Appointment holidayAppt;
+	private static Appointment vacationHolidayAppt;
 
 
 	@BeforeClass
@@ -60,6 +61,13 @@ public class addToDayTests {
 		holidayAppt.setHoliday(1);
 		holidayAppt.setDate(ApptDate.getTime());
 		AppointmentModel.getReference().saveAppt(holidayAppt);
+		
+		vacationHolidayAppt = AppointmentModel.getReference().newAppt();
+		vacationHolidayAppt.setText("My Holiday & Vacation Appt");
+		vacationHolidayAppt.setHoliday(1);
+		vacationHolidayAppt.setVacation(1);
+		vacationHolidayAppt.setDate(ApptDate.getTime());
+		AppointmentModel.getReference().saveAppt(vacationHolidayAppt);
 		
 	}
 
@@ -164,4 +172,65 @@ public class addToDayTests {
 	// Tests from Boundary Value Analysis
 	// No additional tests.  Tests from previous approaches are sufficient
 	// --------------------------------------------------------------------
+	
+	// --------------------------------------------------------------------
+	// Tests from Equivalence Class Partitioning
+	// --------------------------------------------------------------------
+	@Test
+	public void Test8PublicPrivateAppts() throws Exception {
+		String publicValue = Prefs.getPref(PrefName.SHOWPUBLIC);
+		Prefs.putPref(PrefName.SHOWPUBLIC, "true");
+		
+		String privateValue = Prefs.getPref(PrefName.SHOWPRIVATE);
+		Prefs.putPref(PrefName.SHOWPRIVATE, "true");
+		
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		l.add(privateAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",2, d.getItems().size());
+		String observedItemLabel1 = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		String observedItemLabel2 = ((TreeSet<CalendarEntity>) d.getItems()).last().getText();
+		assertEquals("Appointment Text 1", privateAppt.getText(), observedItemLabel1);
+		assertEquals("Appointment Text 2", publicAppt.getText(), observedItemLabel2);
+		
+		Prefs.putPref(PrefName.SHOWPUBLIC, publicValue);
+		Prefs.putPref(PrefName.SHOWPRIVATE, privateValue);		
+	}
+	
+	@Test
+	public void Test9NoHolidayNoVacation() throws Exception {
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(publicAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		int observedHoliday = d.getHoliday();
+		int observedVacation = d.getVacation();
+		assertEquals("Appointment Text", publicAppt.getText(), observedItemLabel);
+		assertEquals("Holiday Flag", 0, observedHoliday);
+		assertEquals("Vacation Flag", 0, observedVacation);
+		
+	}
+	
+	@Test
+	public void Test10HolidayVacation() throws Exception {
+		Day d = Day.getNewDay();
+		List<Integer> l = new ArrayList<Integer>();
+		l.add(vacationHolidayAppt.getKey());
+		Day.TestAddToDay(d, l);
+		
+		assertEquals("Items in collection",1, d.getItems().size());
+		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
+		int observedHoliday = d.getHoliday();
+		int observedVacation = d.getVacation();
+		assertEquals("Appointment Text", vacationHolidayAppt.getText(), observedItemLabel);
+		assertEquals("Holiday Flag", 1, observedHoliday);
+		assertEquals("Vacation Flag", 1, observedVacation);
+		
+	}
 }
