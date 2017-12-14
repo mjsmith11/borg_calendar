@@ -14,7 +14,6 @@ public class NoDBGetDayTests {
 	// Tests from Specification Analysis
 	// --------------------------------------------------------------------
 	
-	//This actually causes a null pointer exception, but something is causing JUnit to see ExceptionInInitializerError
 	@Test(expected=ExceptionInInitializerError.class)
 	public void Test8NoDatabaseConnection() throws Exception {
 		AppointmentModel.getReference().refresh();
