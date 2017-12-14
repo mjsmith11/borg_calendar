@@ -192,6 +192,18 @@ public class Day {
 		}
 
 	}
+	
+	/**
+	 * Wrapper for addToDay
+	 * @param day
+	 *            the day
+	 * @param l
+	 *            list of appointment keys to add
+	 * @throws Exception
+	 */
+	public static void TestAddToDay(Day day, Collection<Integer> l) throws Exception {
+		addToDay(day,l);
+	}
 
 	/**
 	 * Gets the Day information for a given day.
@@ -429,6 +441,14 @@ public class Day {
 		vacation = 0;
 		items = new TreeSet<CalendarEntity>(new apcompare());
 
+	}
+	
+	/**
+	 * Wrapper for no-arg constructor
+	 * @return new Day
+	 */
+	public static Day getNewDay() {
+		return new Day();
 	}
 
 	/**
