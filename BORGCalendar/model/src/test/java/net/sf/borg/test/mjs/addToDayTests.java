@@ -136,8 +136,10 @@ public class addToDayTests {
 		assertEquals("Items in collection",1, d.getItems().size());
 		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
 		int observedVacation = d.getVacation();
+		int observedHoliday = d.getHoliday();
 		assertEquals("Appointment Text", vacationAppt.getText(), observedItemLabel);
 		assertEquals("Vacation Flag", 1, observedVacation);
+		assertEquals("Holiday Flag", 0, observedHoliday);
 		
 	}
 	
@@ -151,8 +153,15 @@ public class addToDayTests {
 		assertEquals("Items in collection",1, d.getItems().size());
 		String observedItemLabel = ((TreeSet<CalendarEntity>) d.getItems()).first().getText();
 		int observedHoliday = d.getHoliday();
+		int observedVacation = d.getVacation();
 		assertEquals("Appointment Text", holidayAppt.getText(), observedItemLabel);
 		assertEquals("Holiday Flag", 1, observedHoliday);
+		assertEquals("Vacation Flag", 0, observedVacation);
 		
 	}
+	
+	// --------------------------------------------------------------------
+	// Tests from Boundary Value Analysis
+	// No additional tests.  Tests from previous approaches are sufficient
+	// --------------------------------------------------------------------
 }
